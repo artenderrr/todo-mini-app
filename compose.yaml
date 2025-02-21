@@ -3,3 +3,7 @@ services:
     build: ./db
     environment:
       - POSTGRES_PASSWORD=postgres
+  backend:
+    build: ./backend
+    ports:
+      - 8000:8000
