@@ -7,3 +7,6 @@ __pycache__/
 
 # JavaScript related
 node_modules/
+
+# Other
+.vscode

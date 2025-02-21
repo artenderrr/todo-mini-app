@@ -55,6 +55,7 @@ source = { virtual = "." }
 dependencies = [
     { name = "asyncpg" },
     { name = "fastapi" },
+    { name = "init-data-python" },
     { name = "python-dotenv" },
     { name = "sqlalchemy", extra = ["asyncio"] },
     { name = "uvicorn" },
@@ -64,6 +65,7 @@ dependencies = [
 requires-dist = [
     { name = "asyncpg", specifier = ">=0.30.0" },
     { name = "fastapi", specifier = ">=0.115.8" },
+    { name = "init-data-python", specifier = ">=1.0.1" },
     { name = "python-dotenv", specifier = ">=1.0.1" },
     { name = "sqlalchemy", extras = ["asyncio"], specifier = ">=2.0.38" },
     { name = "uvicorn", specifier = ">=0.34.0" },
@@ -153,6 +155,15 @@ source = { registry = "https://pypi.org/simple" }
 sdist = { url = "https://files.pythonhosted.org/packages/f1/70/7703c29685631f5a7590aa73f1f1d3fa9a380e654b86af429e0934a32f7d/idna-3.10.tar.gz", hash = "sha256:12f65c9b470abda6dc35cf8e63cc574b1c52b11df2c86030af0ac09b01b13ea9", size = 190490 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/76/c6/c88e154df9c4e1a2a66ccf0005a88dfb2650c1dffb6f5ce603dfbd452ce3/idna-3.10-py3-none-any.whl", hash = "sha256:946d195a0d259cbba61165e88e65941f16e9b36ea6ddb97f00452bae8b1287d3", size = 70442 },
+]
+
+[[package]]
+name = "init-data-python"
+version = "1.0.1"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/86/8f/998b7c87cba6c76e27248e8a03bcda577d59baff765d06acc914733cc1f7/init_data_python-1.0.1.tar.gz", hash = "sha256:3a6fba64a2e8fd99d121d9ea902324e974b6df05e6b29303a6fb109bf5b48341", size = 4097 }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/e0/3e/42c351a456a155cf1a12239cac63129053fa784f504422bfd866e7f55cbb/init_data_python-1.0.1-py3-none-any.whl", hash = "sha256:e2fa479de2cff6a638ba89c18bcf0842a9564277369a46459d970d7c1a4ce670", size = 4314 },
 ]
 
 [[package]]
