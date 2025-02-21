@@ -1,0 +1,9 @@
+# Python related
+.venv/
+.env
+__pycache__/
+*.py[cod]
+.mypy_cache/
+
+# JavaScript related
+node_modules/
