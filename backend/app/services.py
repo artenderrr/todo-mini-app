@@ -1,7 +1,7 @@
 from sqlalchemy import select
 from app.database import Session
 from app.models import TaskModel
-from app.schemas import TaskSchema
+from app.schemas import TaskSchema, TaskUpdateFieldsSchema
 
 class TaskService:
     @staticmethod
@@ -19,6 +19,16 @@ class TaskService:
             task = TaskModel(name=name, owner_id=owner_id)
             session.add(task)
             await session.commit()
+
+    @staticmethod
+    async def update_task(task_id: int, update_fields: TaskUpdateFieldsSchema) -> TaskSchema:
+        async with Session() as session:
+            task = await session.get(TaskModel, task_id)
+            for field, value in update_fields.model_dump(exclude_defaults=True).items():
+                setattr(task, field, value)
+            updated_task = TaskSchema(**task.__dict__)
+            await session.commit()
+        return updated_task
 
     @staticmethod
     async def delete_task(task_id: int) -> None:

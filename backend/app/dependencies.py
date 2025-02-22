@@ -56,3 +56,5 @@ async def task_owned_by_current_user(
         if model.owner_id != user.id:
             raise HTTPException(status_code=403, detail="Task with provided ID belongs to another user")
     return task_id
+
+TaskOwnedByCurrentUser = Annotated[int, Depends(task_owned_by_current_user)]

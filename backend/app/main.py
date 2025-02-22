@@ -1,11 +1,10 @@
-from typing import Annotated
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
-from fastapi import FastAPI, APIRouter, Depends
+from fastapi import FastAPI, APIRouter
 from app.models import create_database_tables
-from app.schemas import BaseTaskSchema, TaskSchema
+from app.schemas import BaseTaskSchema, TaskSchema, TaskUpdateFieldsSchema
 from app.services import TaskService
-from app.dependencies import CurrentUser, task_owned_by_current_user
+from app.dependencies import CurrentUser, TaskOwnedByCurrentUser
 
 
 @asynccontextmanager
@@ -31,8 +30,16 @@ async def create_task(task: BaseTaskSchema, user: CurrentUser) -> BaseTaskSchema
     )
     return task
 
+@router.put("/tasks/{task_id}")
+async def update_task(
+    task_id: TaskOwnedByCurrentUser,
+    update_fields: TaskUpdateFieldsSchema
+) -> TaskSchema:
+    updated_task = await TaskService.update_task(task_id, update_fields)
+    return updated_task
+
 @router.delete("/tasks/{task_id}", status_code=204)
-async def delete_task(task_id: Annotated[int, Depends(task_owned_by_current_user)]) -> None:
+async def delete_task(task_id: TaskOwnedByCurrentUser) -> None:
     await TaskService.delete_task(task_id)
 
 
