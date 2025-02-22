@@ -12,17 +12,21 @@ async def lifespan(app: FastAPI) -> AsyncIterator[None]:
     await create_database_tables()
     yield
 
-app = FastAPI(lifespan=lifespan)
+app = FastAPI(
+    title="TasksAPI",
+    version="1.0.0",
+    lifespan=lifespan
+)
 
-router = APIRouter(prefix="/api")
+router = APIRouter(prefix="/api", tags=["tasks"])
 
 
-@router.get("/tasks")
+@router.get("/tasks", summary="Retrieve all tasks of the current user")
 async def get_tasks(user: CurrentUser) -> list[TaskSchema]:
     tasks = await TaskService.get_tasks_by_owner(owner_id=user.id)
     return tasks
 
-@router.post("/tasks", status_code=201)
+@router.post("/tasks", status_code=201, summary="Create new task for the current user")
 async def create_task(task: BaseTaskSchema, user: CurrentUser) -> BaseTaskSchema:
     await TaskService.create_task(
         name=task.name,
@@ -30,7 +34,7 @@ async def create_task(task: BaseTaskSchema, user: CurrentUser) -> BaseTaskSchema
     )
     return task
 
-@router.put("/tasks/{task_id}")
+@router.put("/tasks/{task_id}", summary="Update the task of the current user")
 async def update_task(
     task_id: TaskOwnedByCurrentUser,
     update_fields: TaskUpdateFieldsSchema
@@ -38,7 +42,11 @@ async def update_task(
     updated_task = await TaskService.update_task(task_id, update_fields)
     return updated_task
 
-@router.delete("/tasks/{task_id}", status_code=204)
+@router.delete(
+    "/tasks/{task_id}",
+    status_code=204,
+    summary="Delete the task of the current user"
+)
 async def delete_task(task_id: TaskOwnedByCurrentUser) -> None:
     await TaskService.delete_task(task_id)
 
