@@ -5,7 +5,7 @@ import urllib.parse
 from dotenv import load_dotenv
 from fastapi import Header, HTTPException, Depends
 from init_data import InitData
-from app.schemas import User
+from app.schemas import UserSchema
 
 
 load_dotenv()
@@ -33,8 +33,8 @@ def valid_init_data(authorization: Annotated[str, Header()]) -> str:
         raise HTTPException(status_code=401, detail="Invalid initialization data")
     return authorization[4:]
 
-def current_user(init_data: Annotated[str, Depends(valid_init_data)]) -> User:
+def current_user(init_data: Annotated[str, Depends(valid_init_data)]) -> UserSchema:
     decoded_init_data = _decode_init_data(init_data, times_to_decode=2)
     init_data_dict = _parse_init_data(decoded_init_data)
     current_user_data = json.loads(init_data_dict["user"])
-    return User(**current_user_data)
+    return UserSchema(**current_user_data)
