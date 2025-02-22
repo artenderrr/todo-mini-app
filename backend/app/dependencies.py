@@ -5,6 +5,8 @@ import urllib.parse
 from dotenv import load_dotenv
 from fastapi import Header, HTTPException, Depends
 from init_data import InitData
+from app.database import Session
+from app.models import TaskModel
 from app.schemas import UserSchema
 
 
@@ -41,3 +43,16 @@ def current_user(init_data: Annotated[str, Depends(valid_init_data)]) -> UserSch
 
 
 CurrentUser = Annotated[UserSchema, Depends(current_user)]
+
+
+async def task_owned_by_current_user(
+    task_id: int,
+    user: CurrentUser
+) -> int:
+    async with Session() as session:
+        model = await session.get(TaskModel, task_id)
+        if not model:
+            raise HTTPException(status_code=404, detail="Task with provided ID doesn't exist")
+        if model.owner_id != user.id:
+            raise HTTPException(status_code=403, detail="Task with provided ID belongs to another user")
+    return task_id

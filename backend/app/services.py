@@ -19,3 +19,10 @@ class TaskService:
             task = TaskModel(name=name, owner_id=owner_id)
             session.add(task)
             await session.commit()
+
+    @staticmethod
+    async def delete_task(task_id: int) -> None:
+        async with Session() as session:
+            task = await session.get(TaskModel, task_id)
+            await session.delete(task)
+            await session.commit()
