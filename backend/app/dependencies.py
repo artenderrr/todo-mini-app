@@ -38,3 +38,6 @@ def current_user(init_data: Annotated[str, Depends(valid_init_data)]) -> UserSch
     init_data_dict = _parse_init_data(decoded_init_data)
     current_user_data = json.loads(init_data_dict["user"])
     return UserSchema(**current_user_data)
+
+
+CurrentUser = Annotated[UserSchema, Depends(current_user)]
