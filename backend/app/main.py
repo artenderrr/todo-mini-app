@@ -1,6 +1,7 @@
 from contextlib import asynccontextmanager
 from collections.abc import AsyncIterator
 from fastapi import FastAPI, APIRouter
+from fastapi.middleware.cors import CORSMiddleware
 from app.models import create_database_tables
 from app.schemas import BaseTaskSchema, TaskSchema, TaskUpdateFieldsSchema
 from app.services import TaskService
@@ -16,6 +17,14 @@ app = FastAPI(
     title="TasksAPI",
     version="1.0.0",
     lifespan=lifespan
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173", "http://127.0.0.1:5173"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"]
 )
 
 router = APIRouter(prefix="/api", tags=["tasks"])
