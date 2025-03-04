@@ -5,6 +5,7 @@ import urllib.parse
 from dotenv import load_dotenv
 from fastapi import Header, HTTPException, Depends
 from init_data import InitData
+from init_data.main import InvalidInitDataError
 from app.database import Session
 from app.models import TaskModel
 from app.schemas import UserSchema
@@ -27,11 +28,14 @@ def _parse_init_data(init_data: str) -> dict[str, str]:
 
 
 def valid_init_data(authorization: Annotated[str, Header()]) -> str:
-    if (
-        not authorization.startswith("tma ")
-        or
-        not InitData(authorization[4:], os.getenv("BOT_TOKEN")).validate(times_to_decode=2) # type: ignore
-    ):
+    try:
+        if (
+            not authorization.startswith("tma ")
+            or
+            not InitData(authorization[4:], os.getenv("BOT_TOKEN")).validate(times_to_decode=2) # type: ignore
+        ):
+            raise InvalidInitDataError
+    except InvalidInitDataError:
         raise HTTPException(status_code=401, detail="Invalid initialization data")
     return authorization[4:]
 
