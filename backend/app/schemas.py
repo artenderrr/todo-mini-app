@@ -3,7 +3,7 @@ from pydantic import BaseModel, Field
 
 class UserSchema(BaseModel):
     id: int
-    username: str
+    username: str | None = None
     first_name: str
     last_name: str
 
