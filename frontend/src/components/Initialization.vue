@@ -1,5 +1,8 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import AppHeader from "./AppHeader.vue";
+import Loading from "./Loading.vue";
+import InitError from "./InitError.vue";
 
 const emit = defineEmits(["complete"]);
 const initState = ref("pending");
@@ -28,5 +31,29 @@ onMounted(initialize);
 </script>
 
 <template>
-  <p>Initialization</p>
+  <div class="wrapper">
+    <AppHeader />
+    <Transition name="fade" mode="out-in">
+      <Loading v-if="initState === 'pending'" />
+      <InitError v-else-if="initState === 'failure'" />
+    </Transition>
+  </div>
 </template>
+
+<style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .5s;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+}
+</style>
