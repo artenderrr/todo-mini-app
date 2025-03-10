@@ -6,6 +6,8 @@
 
 html, body, #app {
   height: 100%;
+
+  overscroll-behavior: none;
 }
 
 body {
@@ -14,6 +16,9 @@ body {
 
   font-family: system-ui;
   font-size: 2rem;
+
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 #app {
