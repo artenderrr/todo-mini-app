@@ -2,6 +2,7 @@
 import { ref, onMounted } from "vue";
 import TodoFilter from "./TodoFilter.vue";
 import TodoAddButton from "./TodoAddButton.vue";
+import Todo from "./Todo.vue";
 
 const isHidden = ref(true);
 
@@ -18,6 +19,11 @@ onMounted(slideIn);
       <TodoFilter />
       <TodoAddButton />
     </div>
+    <div class="todos-wrapper">
+    <Todo />
+    <Todo />
+    <Todo />
+    </div>
   </div>
 </template>
 
@@ -27,7 +33,11 @@ onMounted(slideIn);
 
   width: 40rem;
   max-width: 100%;
-  height: 100%;
+  height: 80%;
+
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 
   border: .125rem solid #3b3b3b;
   border-bottom: none;
@@ -50,5 +60,17 @@ onMounted(slideIn);
 
   display: flex;
   justify-content: space-between;
+}
+
+.todos-wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+
+  overflow: scroll;
+}
+
+.todos-wrapper::-webkit-scrollbar {
+  display: none;
 }
 </style>
