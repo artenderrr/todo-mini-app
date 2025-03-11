@@ -20,9 +20,11 @@ onMounted(slideIn);
       <TodoAddButton />
     </div>
     <div class="todos-wrapper">
-    <Todo />
-    <Todo />
-    <Todo />
+      <Todo />
+      <Todo />
+      <Todo />
+      <Todo />
+      <Todo />
     </div>
   </div>
 </template>
@@ -63,10 +65,6 @@ onMounted(slideIn);
 }
 
 .todos-wrapper {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-
   overflow: scroll;
 }
 
