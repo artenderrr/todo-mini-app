@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from "vue";
 
-defineProps(["done"]);
+const emit = defineEmits(["update-name"]);
+
+defineProps(["name", "done"]);
 
 const warning = ref(false);
 
@@ -22,6 +24,10 @@ function restrictLength(e) {
     previousContent = newContent;
   }
 }
+
+function updateName(e) {
+  emit("update-name", e.target.innerText);
+}
 </script>
 
 <template>
@@ -29,7 +35,8 @@ function restrictLength(e) {
     <p :class="{ done }"
     contenteditable
     @keydown.enter="e => e.target.blur()"
-    @input="restrictLength"></p>
+    @blur="updateName"
+    @input="restrictLength">{{ name }}</p>
   </div>
 </template>
 

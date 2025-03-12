@@ -10,6 +10,24 @@ function slideIn() {
   setTimeout(() => isHidden.value = false, 1);
 }
 
+const todos = ref([
+  {
+    "id": 1,
+    "name": "Brew coffee",
+    "done": false
+  },
+  {
+    "id": 2,
+    "name": "Go for a walk",
+    "done": false
+  },
+  {
+    "id": 3,
+    "name": "Do something else",
+    "done": false
+  }
+]);
+
 onMounted(slideIn);
 </script>
 
@@ -20,11 +38,10 @@ onMounted(slideIn);
       <TodoAddButton />
     </div>
     <div class="todos-wrapper">
-      <Todo />
-      <Todo />
-      <Todo />
-      <Todo />
-      <Todo />
+      <Todo v-for="todo in todos"
+      :name="todo.name" :done="todo.done"
+      @click-checkbox="todo.done = !todo.done"
+      @update-name="value => todo.name = value" />
     </div>
   </div>
 </template>
