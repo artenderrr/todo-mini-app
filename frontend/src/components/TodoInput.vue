@@ -1,6 +1,8 @@
 <script setup>
 import { ref } from "vue";
 
+defineProps(["done"]);
+
 const warning = ref(false);
 
 function highlightBorders() {
@@ -24,7 +26,7 @@ function restrictLength(e) {
 
 <template>
   <div class="wrapper" :class="{ warning }">
-    <p
+    <p :class="{ done }"
     contenteditable
     @keydown.enter="e => e.target.blur()"
     @input="restrictLength"></p>
@@ -59,5 +61,11 @@ p {
   
   border-radius: calc(.5rem - .125rem);
   outline: none;
+
+  transition: color .125s;
+}
+
+p.done {
+  color: #5b5b5b;
 }
 </style>

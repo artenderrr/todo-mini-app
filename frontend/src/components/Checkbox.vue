@@ -1,7 +1,5 @@
 <script setup>
-import { ref } from "vue";
-
-const done = ref(false);
+defineProps(["done"]);
 </script>
 
 <template>
