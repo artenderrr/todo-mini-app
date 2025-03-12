@@ -38,15 +38,32 @@ onMounted(slideIn);
       <TodoAddButton />
     </div>
     <div class="todos-wrapper">
-      <Todo v-for="todo in todos"
-      :name="todo.name" :done="todo.done"
-      @click-checkbox="todo.done = !todo.done"
-      @update-name="value => todo.name = value" />
+      <TransitionGroup name="todo-list">
+        <Todo v-for="todo in todos" :key="todo.id"
+        :name="todo.name" :done="todo.done"
+        @click-checkbox="todo.done = !todo.done"
+        @update-name="value => todo.name = value"
+        @delete="todos = todos.filter(i => i.id !== todo.id)" />
+      </TransitionGroup>
     </div>
   </div>
 </template>
 
 <style scoped>
+.todo-list-move,
+.todo-list-enter-active, .todo-list-leave-active {
+  transition: all .5s;
+}
+
+.todo-list-leave-active {
+  position: absolute;
+}
+
+.todo-list-enter-from,
+.todo-list-leave-to {
+  opacity: 0;
+}
+
 .panel {
   background-color: #2b2b2b;
 
@@ -82,6 +99,8 @@ onMounted(slideIn);
 }
 
 .todos-wrapper {
+  height: 100%;
+  position: relative;
   overflow: scroll;
 }
 
