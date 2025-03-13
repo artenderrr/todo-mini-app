@@ -1,5 +1,5 @@
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted, useTemplateRef } from "vue";
 
 const emit = defineEmits(["update-name"]);
 
@@ -28,13 +28,22 @@ function restrictLength(e) {
 function updateName(e) {
   emit("update-name", e.target.innerText);
 }
+
+const inputField = useTemplateRef("inputField");
+
+function blurOnEnter() {
+  inputField.value.blur();
+  window.getSelection()?.removeAllRanges();
+}
+
+onMounted(() => inputField.value.focus());
 </script>
 
 <template>
   <div class="wrapper" :class="{ warning }">
-    <p :class="{ done }"
+    <p ref="inputField" :class="{ done }"
     contenteditable
-    @keydown.enter="e => e.target.blur()"
+    @keydown.enter="blurOnEnter"
     @blur="updateName"
     @input="restrictLength">{{ name }}</p>
   </div>

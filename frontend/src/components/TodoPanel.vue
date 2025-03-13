@@ -10,23 +10,17 @@ function slideIn() {
   setTimeout(() => isHidden.value = false, 1);
 }
 
-const todos = ref([
-  {
-    "id": 1,
-    "name": "Brew coffee",
+let lastId = 0;
+const todos = ref([]);
+
+function addTodo() {
+  todos.value.push({
+    "id": lastId + 1,
+    "name": "",
     "done": false
-  },
-  {
-    "id": 2,
-    "name": "Go for a walk",
-    "done": false
-  },
-  {
-    "id": 3,
-    "name": "Do something else",
-    "done": false
-  }
-]);
+  });
+  lastId++;
+}
 
 onMounted(slideIn);
 </script>
@@ -35,7 +29,7 @@ onMounted(slideIn);
   <div class="panel" :class="{ hidden: isHidden }">
     <div class="controls-wrapper">
       <TodoFilter />
-      <TodoAddButton />
+      <TodoAddButton @click="addTodo"/>
     </div>
     <div class="todos-wrapper">
       <TransitionGroup name="todo-list">
