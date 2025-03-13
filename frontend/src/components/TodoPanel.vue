@@ -32,18 +32,31 @@ onMounted(slideIn);
       <TodoAddButton @click="addTodo"/>
     </div>
     <div class="todos-wrapper">
-      <TransitionGroup name="todo-list">
-        <Todo v-for="todo in todos" :key="todo.id"
-        :name="todo.name" :done="todo.done"
-        @click-checkbox="todo.done = !todo.done"
-        @update-name="value => todo.name = value"
-        @delete="todos = todos.filter(i => i.id !== todo.id)" />
-      </TransitionGroup>
+      <Transition name="fade" mode="out-in">
+        <div v-if="todos.length === 0" class="placeholder">
+          <p>Задач пока нет</p>
+        </div>
+        <TransitionGroup v-else name="todo-list" tag="div">
+          <Todo v-for="todo in todos" :key="todo.id"
+          :name="todo.name" :done="todo.done"
+          @click-checkbox="todo.done = !todo.done"
+          @update-name="value => todo.name = value"
+          @delete="todos = todos.filter(i => i.id !== todo.id)" />
+        </TransitionGroup>
+      </Transition>
     </div>
   </div>
 </template>
 
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity .25s;
+}
+
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
 .todo-list-move,
 .todo-list-enter-active, .todo-list-leave-active {
   transition: all .5s;
@@ -100,5 +113,19 @@ onMounted(slideIn);
 
 .todos-wrapper::-webkit-scrollbar {
   display: none;
+}
+
+.placeholder {
+  color: #5b5b5b;
+
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  justify-content: center;
+}
+
+.placeholder > p {
+  margin-top: .5rem;
 }
 </style>
