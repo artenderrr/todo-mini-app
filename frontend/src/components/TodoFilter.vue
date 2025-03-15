@@ -2,6 +2,8 @@
 import { ref, useTemplateRef } from "vue";
 import { onClickOutside } from "@vueuse/core";
 
+const emit = defineEmits(["filter-change"]);
+
 const isActive = ref(false);
 
 const box = useTemplateRef("box");
@@ -9,19 +11,29 @@ const box = useTemplateRef("box");
 onClickOutside(box, () => isActive.value = false);
 
 const options = ref(["Все", "Выполненные", "Невыполненные"]);
+
+const chosenOption = ref(options.value[0]);
+
+function changeFilter(option) {
+  chosenOption.value = option;
+  emit("filter-change", chosenOption.value);
+  setTimeout(() => document.activeElement.blur(), 0);
+}
+
+defineExpose({ chosenOption });
 </script>
 
 <template>
   <div class="wrapper">
     <div ref="box" class="box" @click="isActive = !isActive">
-      <p>Невыполненные</p>
+      <p>{{ chosenOption }}</p>
       <svg :class="{ active: isActive }" xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 24 24"><path fill="currentColor" d="M8.12 9.29L12 13.17l3.88-3.88a.996.996 0 1 1 1.41 1.41l-4.59 4.59a.996.996 0 0 1-1.41 0L6.7 10.7a.996.996 0 0 1 0-1.41c.39-.38 1.03-.39 1.42 0"/></svg>
     </div>
     <Transition name="slide-fade">
       <div v-if="isActive" class="dropdown">
-        <div v-for="option in options" class="option">
+        <div v-for="option in options" class="option" @click="changeFilter(option)">
           <p>{{ option }}</p>
-          <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 12 12"><!-- Icon from All by undefined - undefined --><path fill="currentColor" d="M9.765 3.205a.75.75 0 0 1 .03 1.06l-4.25 4.5a.75.75 0 0 1-1.075.015L2.22 6.53a.75.75 0 0 1 1.06-1.06l1.705 1.704l3.72-3.939a.75.75 0 0 1 1.06-.03"/></svg>
+          <svg v-if="option === chosenOption" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 12 12"><!-- Icon from All by undefined - undefined --><path fill="currentColor" d="M9.765 3.205a.75.75 0 0 1 .03 1.06l-4.25 4.5a.75.75 0 0 1-1.075.015L2.22 6.53a.75.75 0 0 1 1.06-1.06l1.705 1.704l3.72-3.939a.75.75 0 0 1 1.06-.03"/></svg>
         </div>
       </div>
     </Transition>

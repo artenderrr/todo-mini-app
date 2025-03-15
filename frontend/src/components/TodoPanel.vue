@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted } from "vue";
+import { ref, computed, onMounted, useTemplateRef } from "vue";
 import TodoFilter from "./TodoFilter.vue";
 import TodoAddButton from "./TodoAddButton.vue";
 import Todo from "./Todo.vue";
@@ -12,14 +12,27 @@ function slideIn() {
 
 let lastId = 0;
 const todos = ref([]);
+const todoFilter = ref("Все");
+
+const filteredTodos = computed(() => {
+  return todoFilter.value === "Все" ? todos.value : todos.value.filter(todo => {
+    return todoFilter.value === "Выполненные" ? todo.done : !todo.done;
+  });
+});
+
+const todoFilterElement = useTemplateRef("todoFilter");
 
 function addTodo() {
-  todos.value.push({
-    "id": lastId + 1,
-    "name": "",
-    "done": false
-  });
-  lastId++;
+  todoFilter.value = "Все";
+  todoFilterElement.value.chosenOption = todoFilter.value;
+  setTimeout(() => {
+    todos.value.push({
+      "id": lastId + 1,
+      "name": "",
+      "done": false
+    });
+    lastId++;
+  }, 1);
 }
 
 onMounted(slideIn);
@@ -28,16 +41,16 @@ onMounted(slideIn);
 <template>
   <div class="panel" :class="{ hidden: isHidden }">
     <div class="controls-wrapper">
-      <TodoFilter />
+      <TodoFilter ref="todoFilter" @filter-change="value => todoFilter = value" />
       <TodoAddButton @click="addTodo"/>
     </div>
     <div class="todos-wrapper">
       <Transition name="fade" mode="out-in">
-        <div v-if="todos.length === 0" class="placeholder">
+        <div v-if="filteredTodos.length === 0" class="placeholder">
           <p>Задач пока нет</p>
         </div>
         <TransitionGroup v-else name="todo-list" tag="div">
-          <Todo v-for="todo in todos" :key="todo.id"
+          <Todo v-for="todo in filteredTodos" :key="todo.id"
           :name="todo.name" :done="todo.done"
           @click-checkbox="todo.done = !todo.done"
           @update-name="value => todo.name = value"
