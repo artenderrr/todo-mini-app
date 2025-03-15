@@ -99,7 +99,7 @@ onMounted(slideIn);
 
 .controls-wrapper {
   width: 100%;
-  height: 12.5%;
+  height: 4rem;
 
   display: flex;
   justify-content: space-between;
