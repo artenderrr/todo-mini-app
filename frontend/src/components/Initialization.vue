@@ -1,5 +1,7 @@
 <script setup>
 import { ref, onMounted } from "vue";
+import { useGlobalState } from "../store.js";
+import { fetchTodos } from "../utils.js";
 import AppHeader from "./AppHeader.vue";
 import Loading from "./Loading.vue";
 import InitError from "./InitError.vue";
@@ -7,24 +9,21 @@ import InitError from "./InitError.vue";
 const emit = defineEmits(["complete"]);
 const initState = ref("pending");
 
+const { initData, todos } = useGlobalState();
+
 function parseInitData() {
   return window.location.hash.slice(14).split("&")[0];
 }
 
-async function validateInitData(initData) {
-  const response = await fetch("http://localhost:8000/api/tasks", {
-    headers: {
-      "Authorization": `tma ${initData}`
-    }
-  });
-  return response.ok;
-}
-
 async function initialize() {
-  const initData = parseInitData();
-  const validInitData = await validateInitData(initData);
-  initState.value = validInitData ? "success" : "failure";
-  emit("complete", initState.value);
+  try {
+    initData.value = parseInitData();
+    todos.value = await fetchTodos(initData.value);
+    initState.value = "success";
+  } catch (error) {
+    console.error(error);
+    initState.value = "failure";
+  } emit("complete", initState.value);
 }
 
 onMounted(initialize);

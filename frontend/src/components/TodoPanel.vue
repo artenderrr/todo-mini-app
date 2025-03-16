@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, provide, onMounted, useTemplateRef } from "vue";
+import { useGlobalState } from "../store.js";
 import TodoFilter from "./TodoFilter.vue";
 import TodoAddButton from "./TodoAddButton.vue";
 import Todo from "./Todo.vue";
@@ -17,8 +18,12 @@ function slideIn() {
   }, 1);
 }
 
-let lastId = 0;
-const todos = ref([]);
+function findLastId(todos) {
+  return Math.max(todos.map(todo => todo.id));
+}
+
+const { todos } = useGlobalState();
+let lastId = findLastId(todos.value);
 const todoFilter = ref("Все");
 
 const filteredTodos = computed(() => {
