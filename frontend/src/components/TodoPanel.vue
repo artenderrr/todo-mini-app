@@ -29,7 +29,7 @@ const filteredTodos = computed(() => {
   });
 });
 
-const todoFilterElement = useTemplateRef("todoFilter");
+const todoFilterElement = useTemplateRef("todoFilterElement");
 
 function addTodo() {
   todoFilter.value = "Все";
@@ -50,7 +50,7 @@ onMounted(slideIn);
 <template>
   <div class="panel" :class="{ hidden: isHidden }">
     <div class="controls-wrapper">
-      <TodoFilter ref="todoFilter" @filter-change="value => todoFilter = value" />
+      <TodoFilter ref="todoFilterElement" @filter-change="value => todoFilter = value" />
       <TodoAddButton @click="addTodo"/>
     </div>
     <div class="todos-wrapper">
