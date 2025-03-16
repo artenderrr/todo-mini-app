@@ -1,5 +1,5 @@
 <script setup>
-import { onMounted, useTemplateRef } from "vue";
+import { inject, onMounted, useTemplateRef } from "vue";
 import Checkbox from "./Checkbox.vue";
 import TodoInput from "./TodoInput.vue";
 
@@ -8,7 +8,10 @@ defineProps(["name", "done"]);
 const card = useTemplateRef("card");
 
 function scrollIntoView() {
-  card.value.scrollIntoView({ behavior: "smooth" });
+  const slideInFinished = inject("slideInFinished");
+  if (slideInFinished.value) {
+    card.value.scrollIntoView({ behavior: "smooth" });
+  }
 }
 
 onMounted(scrollIntoView);

@@ -1,5 +1,5 @@
 <script setup>
-import { ref, onMounted, useTemplateRef } from "vue";
+import { ref, inject, onMounted, useTemplateRef } from "vue";
 
 const emit = defineEmits(["update-name", "left-empty"]);
 
@@ -41,7 +41,14 @@ function blurOnEnter() {
   window.getSelection()?.removeAllRanges();
 }
 
-onMounted(() => inputField.value.focus());
+function focus() {
+  const slideInFinished = inject("slideInFinished");
+  if (slideInFinished.value) {
+    inputField.value.focus();
+  }
+}
+
+onMounted(focus);
 </script>
 
 <template>

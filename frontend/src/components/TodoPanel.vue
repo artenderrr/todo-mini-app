@@ -1,17 +1,26 @@
 <script setup>
-import { ref, computed, onMounted, useTemplateRef } from "vue";
+import { ref, computed, provide, onMounted, useTemplateRef } from "vue";
 import TodoFilter from "./TodoFilter.vue";
 import TodoAddButton from "./TodoAddButton.vue";
 import Todo from "./Todo.vue";
 
 const isHidden = ref(true);
 
+const slideInFinished = ref(false);
+provide("slideInFinished", slideInFinished);
+
 function slideIn() {
-  setTimeout(() => isHidden.value = false, 1);
+  document.activeElement.blur();
+  setTimeout(() => {
+    isHidden.value = false;
+    setTimeout(() => slideInFinished.value = true, 1000);
+  }, 1);
 }
 
-let lastId = 0;
-const todos = ref([]);
+let lastId = 1;
+const todos = ref([
+  { id: 1, name: "Wake up", done: false }
+]);
 const todoFilter = ref("Все");
 
 const filteredTodos = computed(() => {
