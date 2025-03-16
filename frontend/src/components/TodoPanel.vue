@@ -36,8 +36,21 @@ const filteredTodos = computed(() => {
 const todoFilterElement = useTemplateRef("todoFilterElement");
 
 function addTodo() {
+  const previousFilter = todoFilter.value;
+  let delay = todoFilter.value === "Все" ? 1 : 250;
+
   todoFilter.value = "Все";
   todoFilterElement.value.chosenOption = todoFilter.value;
+
+  if (previousFilter !== "Все") {
+    delay += 55 * filteredTodos.value.length;
+  }
+
+  setTimeout(() => {
+    document.activeElement.blur();
+    window.getSelection()?.removeAllRanges();
+  }, 0);
+
   setTimeout(() => {
     todos.value.push({
       "id": lastId + 1,
@@ -45,7 +58,7 @@ function addTodo() {
       "done": false
     });
     lastId++;
-  }, 1);
+  }, delay);
 }
 
 async function onUpdateName(todo, newName) {

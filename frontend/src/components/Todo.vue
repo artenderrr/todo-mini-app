@@ -10,7 +10,9 @@ const card = useTemplateRef("card");
 function scrollIntoView() {
   const slideInFinished = inject("slideInFinished");
   if (slideInFinished.value) {
-    card.value.scrollIntoView({ behavior: "smooth" });
+    setTimeout(() => {
+      card.value.scrollIntoView({ behavior: "smooth", block: "end" });
+    }, 0);
   }
 }
 
