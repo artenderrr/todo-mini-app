@@ -72,6 +72,25 @@ async function onUpdateName(todo, newName) {
   }
 
   todos.value = await fetchTodos(initData.value);
+
+  setTimeout(() => {
+    document.activeElement.blur();
+    window.getSelection()?.removeAllRanges();
+  }, 0);
+
+  lastId = findLastId(todos.value);
+}
+
+async function onDelete(todo) {
+  todos.value = todos.value.filter(i => i.id !== todo.id);
+
+  const response = await fetch(`http://localhost:8000/api/tasks/${todo.id}`, {
+    method: "DELETE",
+    headers: {
+      "Authorization": `tma ${initData.value}`,
+      "Content-Type": "application/json"
+    }
+  });
 }
 
 onMounted(slideIn);
@@ -93,7 +112,7 @@ onMounted(slideIn);
           :name="todo.name" :done="todo.done"
           @click-checkbox="todo.done = !todo.done"
           @update-name="value => onUpdateName(todo, value)"
-          @delete="todos = todos.filter(i => i.id !== todo.id)" />
+          @delete="onDelete(todo)" />
         </TransitionGroup>
       </Transition>
     </div>

@@ -8,7 +8,7 @@ class UserSchema(BaseModel):
     last_name: str
 
 class BaseTaskSchema(BaseModel):
-    name: str = Field(min_length=1, max_length=20)
+    name: str = Field(min_length=1, max_length=64)
 
 class TaskSchema(BaseTaskSchema):
     id: int
@@ -16,5 +16,5 @@ class TaskSchema(BaseTaskSchema):
     owner_id: int
 
 class TaskUpdateFieldsSchema(BaseModel):
-    name: str | None = Field(min_length=1, max_length=20, default=None)
+    name: str | None = Field(min_length=1, max_length=64, default=None)
     done: bool | None = None
