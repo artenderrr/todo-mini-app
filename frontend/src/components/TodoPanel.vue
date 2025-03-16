@@ -17,10 +17,8 @@ function slideIn() {
   }, 1);
 }
 
-let lastId = 1;
-const todos = ref([
-  { id: 1, name: "Wake up", done: false }
-]);
+let lastId = 0;
+const todos = ref([]);
 const todoFilter = ref("Все");
 
 const filteredTodos = computed(() => {

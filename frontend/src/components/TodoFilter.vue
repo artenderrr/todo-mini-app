@@ -17,7 +17,10 @@ const chosenOption = ref(options.value[0]);
 function changeFilter(option) {
   chosenOption.value = option;
   emit("filter-change", chosenOption.value);
-  setTimeout(() => document.activeElement.blur(), 0);
+  setTimeout(() => {
+    document.activeElement.blur();
+    setTimeout(() => document.activeElement.blur(), 300)
+  }, 0);
 }
 
 defineExpose({ chosenOption });
