@@ -81,6 +81,19 @@ async function onUpdateName(todo, newName) {
   lastId = findLastId(todos.value);
 }
 
+async function onClickCheckbox(todo) {
+  todo.done = !todo.done;
+
+  const response = await fetch(`http://localhost:8000/api/tasks/${todo.id}`, {
+    method: "PUT",
+    headers: {
+      "Authorization": `tma ${initData.value}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ "done": todo.done })
+  });
+}
+
 async function onDelete(todo) {
   todos.value = todos.value.filter(i => i.id !== todo.id);
 
@@ -110,7 +123,7 @@ onMounted(slideIn);
         <TransitionGroup v-else name="todo-list" tag="div">
           <Todo v-for="todo in filteredTodos" :key="todo.id"
           :name="todo.name" :done="todo.done"
-          @click-checkbox="todo.done = !todo.done"
+          @click-checkbox="onClickCheckbox(todo)"
           @update-name="value => onUpdateName(todo, value)"
           @delete="onDelete(todo)" />
         </TransitionGroup>
