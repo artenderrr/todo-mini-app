@@ -1,6 +1,7 @@
 <script setup>
 import { ref, computed, provide, onMounted, useTemplateRef } from "vue";
 import { useGlobalState } from "../store.js";
+import { fetchTodos } from "../utils.js";
 import TodoFilter from "./TodoFilter.vue";
 import TodoAddButton from "./TodoAddButton.vue";
 import Todo from "./Todo.vue";
@@ -19,10 +20,10 @@ function slideIn() {
 }
 
 function findLastId(todos) {
-  return Math.max(todos.map(todo => todo.id));
+  return Math.max(...todos.map(todo => todo.id), 0);
 }
 
-const { todos } = useGlobalState();
+const { todos, initData } = useGlobalState();
 let lastId = findLastId(todos.value);
 const todoFilter = ref("Все");
 
@@ -47,6 +48,32 @@ function addTodo() {
   }, 1);
 }
 
+async function onUpdateName(todo, newName) {
+  todo.name = newName;
+
+  const updateResponse = await fetch(`http://localhost:8000/api/tasks/${todo.id}`, {
+    method: "PUT",
+    headers: {
+      "Authorization": `tma ${initData.value}`,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ "name": newName })
+  });
+
+  if (updateResponse.status === 404) {
+    const addResponse = await fetch("http://localhost:8000/api/tasks", {
+      method: "POST",
+      headers: {
+        "Authorization": `tma ${initData.value}`,
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ "name": newName })
+    });
+  }
+
+  todos.value = await fetchTodos(initData.value);
+}
+
 onMounted(slideIn);
 </script>
 
@@ -65,7 +92,7 @@ onMounted(slideIn);
           <Todo v-for="todo in filteredTodos" :key="todo.id"
           :name="todo.name" :done="todo.done"
           @click-checkbox="todo.done = !todo.done"
-          @update-name="value => todo.name = value"
+          @update-name="value => onUpdateName(todo, value)"
           @delete="todos = todos.filter(i => i.id !== todo.id)" />
         </TransitionGroup>
       </Transition>
