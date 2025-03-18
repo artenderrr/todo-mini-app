@@ -64,7 +64,7 @@ function addTodo() {
 async function onUpdateName(todo, newName) {
   todo.name = newName;
 
-  const updateResponse = await fetch(`http://localhost:8000/api/tasks/${todo.id}`, {
+  const updateResponse = await fetch(`https://artender.tech/api/tasks/${todo.id}`, {
     method: "PUT",
     headers: {
       "Authorization": `tma ${initData.value}`,
@@ -74,7 +74,7 @@ async function onUpdateName(todo, newName) {
   });
 
   if (updateResponse.status === 404) {
-    const addResponse = await fetch("http://localhost:8000/api/tasks", {
+    const addResponse = await fetch("https://artender.tech/api/tasks", {
       method: "POST",
       headers: {
         "Authorization": `tma ${initData.value}`,
@@ -97,7 +97,7 @@ async function onUpdateName(todo, newName) {
 async function onClickCheckbox(todo) {
   todo.done = !todo.done;
 
-  const response = await fetch(`http://localhost:8000/api/tasks/${todo.id}`, {
+  const response = await fetch(`https://artender.tech/api/tasks/${todo.id}`, {
     method: "PUT",
     headers: {
       "Authorization": `tma ${initData.value}`,
@@ -110,7 +110,7 @@ async function onClickCheckbox(todo) {
 async function onDelete(todo) {
   todos.value = todos.value.filter(i => i.id !== todo.id);
 
-  const response = await fetch(`http://localhost:8000/api/tasks/${todo.id}`, {
+  const response = await fetch(`https://artender.tech/api/tasks/${todo.id}`, {
     method: "DELETE",
     headers: {
       "Authorization": `tma ${initData.value}`,

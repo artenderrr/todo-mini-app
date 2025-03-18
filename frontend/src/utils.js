@@ -1,5 +1,5 @@
 export async function fetchTodos(initData) {
-    const response = await fetch("http://localhost:8000/api/tasks", {
+    const response = await fetch("https://artender.tech/api/tasks", {
         headers: {
             "Authorization": `tma ${initData}`
         }
